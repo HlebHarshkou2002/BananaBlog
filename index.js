@@ -29,11 +29,11 @@ app.post('/auth/register', registerValidator, UserController.register)
 app.get('/auth/me', checkAuth, UserController.getMe)
 
 //Posts
-// app.get('/posts', PostController.getAll)
-// app.get('/posts/:id', PostController.getOne)
+app.get('/posts', PostController.getAll)
+app.get('/posts/:id', PostController.getOne)
 // app.delete('/posts/:id', PostController.remove)
 // app.patch('/posts/:id', PostController.update)
-app.post('/posts', postCreateValidation, PostController.create)
+app.post('/posts', checkAuth, postCreateValidation, PostController.create)
 
 
 app.listen(4444, (err) => {

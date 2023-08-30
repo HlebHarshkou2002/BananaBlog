@@ -1,4 +1,49 @@
-import PostModel from "../models/Post"
+import PostModel from "../models/Post.js"
+
+export const getAll = async (req, res) => {
+    try {
+        const posts = await PostModel.find().populate('user').exec();
+
+        res.json(posts);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: "Не удалось получить статьи",
+        })
+    }
+}
+
+export const getOne = async (req, res) => {
+    try {
+        const postId = req.params.id;
+
+        let doc = await PostModel.findOneAndUpdate(
+            {
+                _id: postId,
+            },
+            {
+                $inc: { viewsCount: 1 }
+            },
+            {
+                new: true,
+            }
+        );
+
+        // console.log("DOCUMENT!!!", doc) 
+        if (!doc) {
+            return res.status(404).json({
+                message: "Статья не найдена"
+            })
+        }
+
+        res.json(doc)
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: "Не удалось получить статью",
+        })
+    }
+}
 
 export const create = async (req, res) => {
     try {
