@@ -61,7 +61,6 @@ app.post('/posts', checkAuth, postCreateValidation, handleValidationErrors, Post
 app.delete('/posts/:id', checkAuth, PostController.remove)
 app.patch('/posts/:id', checkAuth, postCreateValidation, handleValidationErrors, PostController.update)
 
-bla bla
 app.listen(4444, (err) => {
     if (err) {
         return console.log(err);
