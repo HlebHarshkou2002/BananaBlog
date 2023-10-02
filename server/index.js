@@ -1,18 +1,17 @@
 import express from "express";
 import mongoose from "mongoose";
 import multer from "multer";
+import cors from "cors";
 
 //Validators
-import checkAuth from './utils/checkAuth.js'
 import { registerValidator } from './validators/auth.js';
 import { loginValidator } from "./validators/login.js";
 import { postCreateValidation } from "./validators/post.js";
+import { handleValidationErrors, checkAuth} from "./utils/index.js";
 
 
 //Controllers
-import * as UserController from "./constrollers/UserController.js";
-import * as PostController from "./constrollers/PostController.js";
-import handleValidationErrors from "./utils/handleValidationErrors.js";
+import {UserController, PostController} from './constrollers/index.js';
 
 mongoose.connect(
     "mongodb+srv://glebasta:12Gjvgtb21@cluster0.d4lortm.mongodb.net/blog?retryWrites=true&w=majority"
@@ -38,6 +37,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.use(express.json());
+app.use(cors());
 //Роут для того, чтобы при запросе на картинку пользователь мог её посмотреть
 app.use('/uploads', express.static('uploads')); // express.static означает что мы делаем get запрос на получение статичного файла
 
@@ -53,6 +53,9 @@ app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
         url: `/uploads/${req.file.originalname}`
     })
 })
+
+//Tags
+app.get('/tags', PostController.getLastTags)
 
 //Posts
 app.get('/posts', PostController.getAll)
