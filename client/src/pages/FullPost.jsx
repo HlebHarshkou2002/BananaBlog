@@ -6,11 +6,13 @@ import { Index } from "../components/AddComment";
 import { CommentsBlock } from "../components/CommentsBlock";
 import axios from "axios";
 
+import Markdown from 'react-markdown'
+
 export const FullPost = () => {
   const [data, setData] = useState();
   const [isLoading, setLoading] = useState(true);
-  const {id} = useParams();
-  
+  const { id } = useParams();
+
 
   React.useEffect(() => {
     axios.get(`http://localhost:4444/posts/${id}`).then(res => {
@@ -22,8 +24,8 @@ export const FullPost = () => {
     })
   }, [])
 
-  if(isLoading) { 
-    return <Post isLoading={isLoading} isFullPost/>
+  if (isLoading) {
+    return <Post isLoading={isLoading} isFullPost />
   }
 
   return (
@@ -31,7 +33,7 @@ export const FullPost = () => {
       <Post
         id={data._id}
         title={data.title}
-        imageUrl={data.imageUrl}
+        imageUrl={data.imageUrl ? `http://localhost:4444${data.imageUrl}` : ''}
         user={data.user}
         createdAt={data.createdAt}
         viewsCount={data.viewsCount}
@@ -39,7 +41,7 @@ export const FullPost = () => {
         tags={data.tags}
         isFullPost
       >
-        <p>{data.text}</p>
+        <Markdown children={data.text}></Markdown>
       </Post>
       <CommentsBlock
         items={[

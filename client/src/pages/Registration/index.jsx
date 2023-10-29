@@ -35,7 +35,7 @@ export const Registration = () => {
     const data = await dispatch(fetchRegister(values));
 
     if (!data.payload) {
-      return alert('Не удалось авторизоваться')
+      return alert('Не удалось зарегестрироваться')
     }
 
     if ('token' in data.payload) {
@@ -55,7 +55,8 @@ export const Registration = () => {
       <div className={styles.avatar}>
         <Avatar sx={{ width: 100, height: 100 }} />
       </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {/* не забыть обернуть в форму */}
+      <form onSubmit={handleSubmit(onSubmit)}> 
         <TextField error={Boolean(errors.fullName?.message)}
           helperText={errors.fullName?.message} //Вытаскиваем сообщение об ошибке ?.message означает проверку на то, есть ли email
           type="text"
